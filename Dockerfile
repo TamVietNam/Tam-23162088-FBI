@@ -7,7 +7,6 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-# Build ra file WAR
 RUN mvn clean package -DskipTests
 
 # ==========================
@@ -15,21 +14,23 @@ RUN mvn clean package -DskipTests
 # ==========================
 FROM eclipse-temurin:22-jdk
 
-WORKDIR /usr/local/tomcat
+WORKDIR /usr/local
 
-# Cài curl và tải Tomcat 11 (chọn version mới nhất ở Apache Tomcat)
-RUN apt-get update && apt-get install -y curl && \
+# Cài curl và tải Tomcat 11
+RUN apt-get update && apt-get install -y curl tar && \
     curl -O https://downloads.apache.org/tomcat/tomcat-11/v11.0.0-M21/bin/apache-tomcat-11.0.0-M21.tar.gz && \
-    tar xvf apache-tomcat-11.0.0-M21.tar.gz && \
-    mv apache-tomcat-11.0.0-M21/* /usr/local/tomcat/ && \
-    rm -rf apache-tomcat-11.0.0-M21.tar.gz apache-tomcat-11.0.0-M21 && \
-    rm -rf /usr/local/tomcat/webapps/*
+    tar -xvzf apache-tomcat-11.0.0-M21.tar.gz && \
+    mv apache-tomcat-11.0.0-M21 tomcat11 && \
+    rm apache-tomcat-11.0.0-M21.tar.gz
 
-WORKDIR /usr/local/tomcat/webapps
+WORKDIR /usr/local/tomcat11/webapps
 
-# Copy WAR build từ stage 1 vào Tomcat
+# Xóa app mặc định
+RUN rm -rf ROOT
+
+# Copy WAR build từ stage 1 vào ROOT.war
 COPY --from=build /app/target/*.war ROOT.war
 
 EXPOSE 8080
 
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+CMD ["/usr/local/tomcat11/bin/catalina.sh", "run"]
