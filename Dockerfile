@@ -5,16 +5,19 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-# Build và rename file jar thành app.jar
-RUN mvn clean package -DskipTests && mv target/*.jar app.jar
+# Build ra file WAR
+RUN mvn clean package -DskipTests
 
-# Stage 2: Run bằng JDK 22
-FROM eclipse-temurin:22-jdk
-WORKDIR /app
+# Stage 2: Run bằng Tomcat 11 + JDK 22
+FROM tomcat:11.0.0-jdk22-temurin
+WORKDIR /usr/local/tomcat/webapps
 
-# Copy app.jar từ stage build
-COPY --from=build /app/app.jar .
+# Xóa app mặc định
+RUN rm -rf ROOT
+
+# Copy WAR thành ROOT.war
+COPY --from=build /app/target/*.war ROOT.war
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["catalina.sh", "run"]
