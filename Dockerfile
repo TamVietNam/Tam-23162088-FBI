@@ -16,9 +16,9 @@ FROM eclipse-temurin:22-jdk
 
 WORKDIR /usr/local
 
-# Cài curl và tải Tomcat 11
+# Cài curl + tar và tải Tomcat 11 từ archive
 RUN apt-get update && apt-get install -y curl tar && \
-    curl -O https://downloads.apache.org/tomcat/tomcat-11/v11.0.0-M21/bin/apache-tomcat-11.0.0-M21.tar.gz && \
+    curl -O https://archive.apache.org/dist/tomcat/tomcat-11/v11.0.0-M21/bin/apache-tomcat-11.0.0-M21.tar.gz && \
     tar -xvzf apache-tomcat-11.0.0-M21.tar.gz && \
     mv apache-tomcat-11.0.0-M21 tomcat11 && \
     rm apache-tomcat-11.0.0-M21.tar.gz
@@ -28,7 +28,7 @@ WORKDIR /usr/local/tomcat11/webapps
 # Xóa app mặc định
 RUN rm -rf ROOT
 
-# Copy WAR build từ stage 1 vào ROOT.war
+# Copy WAR từ stage build vào ROOT.war
 COPY --from=build /app/target/*.war ROOT.war
 
 EXPOSE 8080
