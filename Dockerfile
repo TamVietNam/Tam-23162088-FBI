@@ -23,13 +23,11 @@ RUN apt-get update && apt-get install -y curl tar && \
     mv apache-tomcat-11.0.0-M21 tomcat11 && \
     rm apache-tomcat-11.0.0-M21.tar.gz
 
-WORKDIR /usr/local/tomcat11/webapps
+# ✅ Xóa toàn bộ webapps mặc định (ROOT, examples, docs, host-manager, manager)
+RUN rm -rf /usr/local/tomcat11/webapps/*
 
-# ✅ XÓA toàn bộ app cũ
-RUN rm -rf ROOT* examples docs host-manager manager
-
-# Copy WAR mới thành ROOT.war
-COPY --from=build /app/target/*.war ROOT.war
+# Copy WAR từ stage build vào ROOT.war
+COPY --from=build /app/target/*.war /usr/local/tomcat11/webapps/ROOT.war
 
 EXPOSE 8080
 CMD ["/usr/local/tomcat11/bin/catalina.sh", "run"]
