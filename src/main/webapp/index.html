@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Survey</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<div class="topbar"></div>
+
+<header class="brand">
+    <!-- Đặt ảnh tại: src/main/webapp/images/murach-logo.png -->
+    <img src="images/murach-logo.png" alt="Murach logo">
+</header>
+
+<main class="container">
+    <h1>Survey</h1>
+    <p class="lead">If you have a moment, we'd appreciate it if you would fill out this survey.</p>
+
+    <!-- Submit tới @WebServlet("/emailList") -->
+    <form action="emailList" method="post" class="form-card">
+        <fieldset>
+            <legend>Your information:</legend>
+
+            <label for="firstName">First Name</label>
+            <input id="firstName" name="firstName" type="text" required>
+
+            <label for="lastName">Last Name</label>
+            <input id="lastName" name="lastName" type="text" required>
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+
+            <label for="dob">Date of Birth</label>
+            <input id="dob" name="dob" type="date">
+        </fieldset>
+
+        <fieldset>
+            <legend>How did you hear about us?</legend>
+            <div class="inline-group">
+                <label><input type="radio" name="hearAbout" value="Search engine" checked> Search engine</label>
+                <label><input type="radio" name="hearAbout" value="Word of mouth"> Word of mouth</label>
+                <label><input type="radio" name="hearAbout" value="Social Media"> Social Media</label>
+                <label><input type="radio" name="hearAbout" value="Other"> Other</label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Would you like to receive announcements about new CDs and special offers?</legend>
+            <div class="opt-block">
+                <label><input type="checkbox" name="receiveCds" value="yes"> YES, I'd like that.</label>
+            </div>
+            <div class="opt-block">
+                <label><input type="checkbox" name="receiveEmails" value="yes"> YES, please send me email announcements.</label>
+            </div>
+        </fieldset>
+
+        <label for="contactBy">Please contact me by:</label>
+        <select id="contactBy" name="contactBy">
+            <option>Email or postal mail</option>
+            <option>Email only</option>
+            <option>Postal mail only</option>
+        </select>
+
+        <div class="actions">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>
